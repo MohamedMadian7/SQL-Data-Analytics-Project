@@ -18,15 +18,15 @@ SQL Functions Used:
 to both the average sales performance of the product and the previous year's sales */
 WITH yearly_product_sales AS (
     SELECT
-        YEAR(f.order_date) AS order_year,
+        YEAR(s.order_date) AS order_year,
         p.product_name,
-        SUM(f.sales_amount) AS current_sales
-    FROM gold.fact_sales f
+        SUM(s.sales_amount) AS current_sales
+    FROM gold.fact_sales s
     LEFT JOIN gold.dim_products p
-        ON f.product_key = p.product_key
-    WHERE f.order_date IS NOT NULL
+        ON s.product_key = p.product_key
+    WHERE s.order_date IS NOT NULL
     GROUP BY 
-        YEAR(f.order_date),
+        YEAR(s.order_date),
         p.product_name
 )
 SELECT
@@ -50,3 +50,4 @@ SELECT
     END AS py_change
 FROM yearly_product_sales
 ORDER BY product_name, order_year;
+
